@@ -13,15 +13,17 @@ interface IVideo {
     availableResolutions: Array<string>
 }
 
+interface IError {
+    message: string;
+    field: string;
+}
+
 let videos: IVideo[] = [];
 
-const errorMessage = (message: string, field: string) => {
+const errorMessage = (err: Array<IError>) => {
     return {
         errorsMessages: [
-            {
-                message: message,
-                field: field
-            }
+            ...err
         ]
     }
 }
@@ -60,19 +62,38 @@ videoRouter.delete('/videos/:id', (req: Request, res: Response) => {
 
 //create single videos
 videoRouter.post('/videos', (req: Request, res: Response) => {
+
+    const err:IError[] = [];
+
     if (!req.body.title) {
-        res.status(400).send(errorMessage("Title can't by empty", "title"));
+        err.push({
+            message: "Title can't by empty",
+            field: "title"
+        });
     }
-    else if (req.body.title.length > 40) {
-        res.status(400).send(errorMessage("Title can't by more than 40 characters", "title"));
+
+    if (req.body.title && req.body.title.length > 40) {
+        err.push({
+            message: "Title can't by more than 40 characters",
+            field: "title"
+        });
     }
-    else if (!req.body.author) {
-        res.status(400).send(errorMessage("Author can't by empty", "author"));
+
+    if (!req.body.author) {
+        err.push({
+            message: "Author can't by empty",
+            field: "author"
+        });
     }
-    else if (req.body.author.length > 20) {
-        res.status(400).send(errorMessage("Author can't by more than 20 characters", "author"));
+
+    if (req.body.author && req.body.author.length > 20) {
+        err.push({
+            message: "Author can't by more than 20 characters",
+            field: "author"
+        });
     }
-    else {
+
+    if (err.length === 0) {
         const newVideo: IVideo = {
             id: +(new Date()),
             title: req.body.title,
@@ -85,34 +106,62 @@ videoRouter.post('/videos', (req: Request, res: Response) => {
         }
         videos.push(newVideo);
         res.status(201).send(newVideo);
+    } else {
+        res.status(400).send(errorMessage(err));
     }
 });
 
 //update single videos
 videoRouter.put('/videos/:id', (req: Request, res: Response) => {
+    const err:IError[] = [];
     const id: number = +req.params.id;
     if (!videos.find(item => item.id === id)) {
         res.send(404);
     }
-    else if (!req.body.title) {
-        res.status(400).send(errorMessage("Title can't by empty", "title"));
+
+    if (!req.body.title) {
+        err.push({
+            message: "Title can't by empty",
+            field: "title"
+        });
     }
-    else if (!req.body.author) {
-        res.status(400).send(errorMessage("Author can't by empty", "author"));
+
+    if (!req.body.author) {
+        err.push({
+            message: "Author can't by empty",
+            field: "author"
+        });
     }
-    else if (req.body.author.length > 20) {
-        res.status(400).send(errorMessage("Author can't by more than 40 characters", "author"));
+
+    if (req.body.author && req.body.author.length > 20) {
+        err.push({
+            message: "Author can't by more than 40 characters",
+            field: "author"
+        });
     }
-    else if (req.body.title.length > 40) {
-        res.status(400).send(errorMessage("Title can't by more than 20 characters", "title"));
+
+    if (req.body.title && req.body.title.length > 40) {
+        err.push({
+            message: "Title can't by more than 20 characters",
+            field: "title"
+        });
     }
+
     if (req.body.minAgeRestriction && +req.body.minAgeRestriction > 18) {
-        res.status(400).send(errorMessage("MinAgeRestriction can't by more than 18", "minAgeRestriction"));
+        err.push({
+            message: "MinAgeRestriction can't by more than 18",
+            field: "minAgeRestriction"
+        });
+
     }
     if (req.body.minAgeRestriction && +req.body.minAgeRestriction < 0) {
-        res.status(400).send(errorMessage("MinAgeRestriction can't by less than 0", "minAgeRestriction"));
+        err.push({
+            message: "MinAgeRestriction can't by less than 0",
+            field: "minAgeRestriction"
+        });
     }
-    else {
+
+    if (err.length === 0) {
         videos = videos.map(item => {
             if (item.id === +req.params.id) {
                 return {
@@ -130,6 +179,8 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
 
         });
         res.send(204);
+    } else {
+        res.status(400).send(errorMessage(err));
     }
 });
 
