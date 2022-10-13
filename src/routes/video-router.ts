@@ -34,6 +34,13 @@ function addDays(date:Date, days: number) {
     return copy
 }
 
+function isIsoDate(str:string) {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+    const d = new Date(str);
+    // @ts-ignore
+    return d instanceof Date && !isNaN(d) && d.toISOString()===str; // valid date
+}
+
 //Get all videos
 videoRouter.get('/videos', (req: Request, res: Response) => {
     res.send(videos);
@@ -179,6 +186,13 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         err.push({
             message: "canBeDownloaded can be only boolean",
             field: "canBeDownloaded"
+        });
+    }
+
+    if (!isIsoDate(req.body.publicationDate)) {
+        err.push({
+            message: "publicationDate can be only date",
+            field: "publicationDate"
         });
     }
 
