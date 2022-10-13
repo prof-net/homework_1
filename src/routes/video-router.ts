@@ -77,7 +77,7 @@ videoRouter.post('/videos', (req: Request, res: Response) => {
             id: +(new Date()),
             title: req.body.title,
             author: req.body.author,
-            canBeDownloaded: null,
+            canBeDownloaded: false,
             minAgeRestriction: null,
             createdAt: new Date().toISOString(),
             publicationDate: addDays(new Date(), 1).toISOString(),
@@ -116,7 +116,8 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         videos.map(item => {
             return {
                 ...item,
-                ...req.body
+                ...req.body,
+                canBeDownloaded: req.body.canBeDownloaded ? true : false
             }
         });
         res.send(204);
