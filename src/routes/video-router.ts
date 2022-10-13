@@ -114,12 +114,19 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
     }
     else {
         videos.map(item => {
-            return {
-                ...item,
-                ...req.body,
-                id: +req.params.id,
-                canBeDownloaded: req.body.canBeDownloaded ? true : false
+
+            if (item.id === +req.params.id) {
+                return {
+                    ...item,
+                    ...req.body,
+                    id: +req.params.id,
+                    createdAt: req.body.createdAt ? req.body.createdAt : item.createdAt,
+                    publicationDate: req.body.publicationDate ? req.body.publicationDate : item.publicationDate,
+                    canBeDownloaded: req.body.canBeDownloaded ? true : false
+                }
             }
+            return item;
+
         });
         res.send(204);
     }
