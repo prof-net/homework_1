@@ -175,6 +175,13 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         });
     }
 
+    if (typeof req.body.canBeDownloaded !== "boolean") {
+        err.push({
+            message: "canBeDownloaded can be only boolean",
+            field: "canBeDownloaded"
+        });
+    }
+
     if (err.length === 0) {
         videos = videos.map(item => {
             if (item.id === +req.params.id) {
