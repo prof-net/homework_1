@@ -26,6 +26,12 @@ const errorMessage = (message: string, field: string) => {
     }
 }
 
+function addDays(date:Date, days: number) {
+    const copy = new Date(Number(date))
+    copy.setDate(date.getDate() + days)
+    return copy
+}
+
 //Get all videos
 videoRouter.get('/videos', (req: Request, res: Response) => {
     res.send(videos);
@@ -74,7 +80,7 @@ videoRouter.post('/videos', (req: Request, res: Response) => {
             canBeDownloaded: null,
             minAgeRestriction: null,
             createdAt: new Date().toISOString(),
-            publicationDate: new Date().toISOString(),
+            publicationDate: addDays(new Date(), 1).toISOString(),
             availableResolutions: req.body.availableResolutions
         }
         videos.push(newVideo);
