@@ -1,10 +1,13 @@
-import express, {Request, Response} from 'express';
+import express from 'express';
+import bodyParser from 'body-parser';
+import {videoRouter} from "./routes/video-router";
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello world');
-})
+app.use(bodyParser());
+
+app.use('/api', videoRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
