@@ -186,7 +186,7 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
                     createdAt: req.body.createdAt ? req.body.createdAt : item.createdAt,
                     publicationDate: req.body.publicationDate ? req.body.publicationDate : item.publicationDate,
                     canBeDownloaded: req.body.canBeDownloaded ? true : false,
-                    availableResolutions: [item.availableResolutions, ...req.body.availableResolutions]
+                    availableResolutions: [...new Set([...item.availableResolutions, ...req.body.availableResolutions])]
                 }
             }
             return item;
