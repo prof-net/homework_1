@@ -113,16 +113,17 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         res.status(400).send(errorMessage("MinAgeRestriction can't by less than 0", "minAgeRestriction"));
     }
     else {
-        videos.map(item => {
-
+        videos = videos.map(item => {
             if (item.id === +req.params.id) {
                 return {
-                    ...item,
-                    ...req.body,
                     id: +req.params.id,
+                    title: req.body.title,
+                    author: req.body.author,
+                    minAgeRestriction: req.body.minAgeRestriction,
                     createdAt: req.body.createdAt ? req.body.createdAt : item.createdAt,
                     publicationDate: req.body.publicationDate ? req.body.publicationDate : item.publicationDate,
-                    canBeDownloaded: req.body.canBeDownloaded ? true : false
+                    canBeDownloaded: req.body.canBeDownloaded ? true : false,
+                    availableResolutions: req.body.availableResolutions
                 }
             }
             return item;
