@@ -117,6 +117,7 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
             return {
                 ...item,
                 ...req.body,
+                id: +req.params.id,
                 canBeDownloaded: req.body.canBeDownloaded ? true : false
             }
         });
