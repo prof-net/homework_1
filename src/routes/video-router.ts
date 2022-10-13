@@ -161,6 +161,13 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         });
     }
 
+    if (req.body.availableResolutions.filter((item:string) => item === "Invalid") ) {
+        err.push({
+            message: "AvailableResolutions can't by Invalid",
+            field: "availableResolutions"
+        });
+    }
+
     if (err.length === 0) {
         videos = videos.map(item => {
             if (item.id === +req.params.id) {
@@ -172,7 +179,7 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
                     createdAt: req.body.createdAt ? req.body.createdAt : item.createdAt,
                     publicationDate: req.body.publicationDate ? req.body.publicationDate : item.publicationDate,
                     canBeDownloaded: req.body.canBeDownloaded ? true : false,
-                    availableResolutions: req.body.availableResolutions
+                    availableResolutions: [item.availableResolutions, ...req.body.availableResolutions]
                 }
             }
             return item;
