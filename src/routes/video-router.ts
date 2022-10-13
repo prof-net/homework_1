@@ -93,6 +93,13 @@ videoRouter.post('/videos', (req: Request, res: Response) => {
         });
     }
 
+    if (req.body.availableResolutions.filter((item:string) => item === "Invalid").length > 0  ) {
+        err.push({
+            message: "AvailableResolutions can't by Invalid",
+            field: "availableResolutions"
+        });
+    }
+
     if (err.length === 0) {
         const newVideo: IVideo = {
             id: +(new Date()),
@@ -161,7 +168,7 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         });
     }
 
-    if (req.body.availableResolutions.filter((item:string) => item === "Invalid") ) {
+    if (req.body.availableResolutions.filter((item:string) => item === "Invalid").length > 0 ) {
         err.push({
             message: "AvailableResolutions can't by Invalid",
             field: "availableResolutions"
