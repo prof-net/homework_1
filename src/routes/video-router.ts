@@ -111,7 +111,7 @@ videoRouter.post('/videos', (req: Request, res: Response) => {
         });
     }
 
-    if (req.body.availableResolutions.filter((item: enumAvailableResolutions) => Object.values(enumAvailableResolutions).includes(item)).length === 0) {
+    if (req.body.availableResolutions.filter((item: enumAvailableResolutions) => !Object.values(enumAvailableResolutions).includes(item)).length === 0) {
         err.push({
             message: "AvailableResolutions can't by Invalid",
             field: "availableResolutions"
@@ -186,7 +186,7 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         });
     }
 
-    if (req.body.availableResolutions.filter((item: enumAvailableResolutions) => Object.values(enumAvailableResolutions).includes(item)).length === 0) {
+    if (req.body.availableResolutions.filter((item: enumAvailableResolutions) => !Object.values(enumAvailableResolutions).includes(item)).length === 0) {
         err.push({
             message: "AvailableResolutions can't by Invalid",
             field: "availableResolutions"
