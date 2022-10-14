@@ -112,7 +112,7 @@ videoRouter.post('/videos', (req: Request, res: Response) => {
     }
 
     const errorArrAvailableResolutions = req.body.availableResolutions.filter((item: enumAvailableResolutions) => !Object.values(enumAvailableResolutions).includes(item));
-    if (errorArrAvailableResolutions.length === 0) {
+    if (errorArrAvailableResolutions.length > 0) {
         err.push({
             message: "AvailableResolutions can't by Invalid",
             field: "availableResolutions"
@@ -189,7 +189,7 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
 
     const errorArrAvailableResolutions = req.body.availableResolutions.filter((item: enumAvailableResolutions) => !Object.values(enumAvailableResolutions).includes(item));
 
-    if (errorArrAvailableResolutions.length === 0) {
+    if (errorArrAvailableResolutions.length > 0) {
         err.push({
             message: "AvailableResolutions can't by Invalid",
             field: "availableResolutions"
