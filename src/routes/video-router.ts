@@ -186,7 +186,7 @@ videoRouter.put('/videos/:id', (req: Request, res: Response) => {
         });
     }
 
-    if (req.body.availableResolutions.filter((item:string) => item === "Invalid").length > 0 ) {
+    if (Object.values(enumAvailableResolutions).includes(req.body.availableResolutions)) {
         err.push({
             message: "AvailableResolutions can't by Invalid",
             field: "availableResolutions"
