@@ -13,6 +13,17 @@ interface IVideo {
     availableResolutions: Array<string>
 }
 
+enum enumAvailableResolutions {
+    P144 = "P144",
+    P240 = "P240",
+    P360 = "P360",
+    P480 = "P144",
+    P720 = "P480",
+    P1080 = "P1080",
+    P1440 = "P1440",
+    P2160 = "P2160"
+}
+
 interface IError {
     message: string;
     field: string;
@@ -100,7 +111,7 @@ videoRouter.post('/videos', (req: Request, res: Response) => {
         });
     }
 
-    if (req.body.availableResolutions.filter((item:string) => item === "Invalid").length > 0  ) {
+    if (Object.values(enumAvailableResolutions).includes(req.body.availableResolutions)) {
         err.push({
             message: "AvailableResolutions can't by Invalid",
             field: "availableResolutions"
